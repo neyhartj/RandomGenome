@@ -72,14 +72,6 @@ extract_insights <- function(url, genome_keywords = "Genome|genome|sequence",
   
 } # Close function
 
-
-# Function for randomly sampling genomes and insights
-generate_title <- function(genome_insights, n.titles = 1) {
-  
-  replicate(n.titles, {str_c(sample(genome_insights$genome, 1), " provides insights into ", sample(genome_insights$insights, 1))})
-  
-}
-    
   
 # List the url to mine
 urls <- list(
@@ -96,5 +88,22 @@ urls <- list(
 # Extract insights
 genome_insights <- lapply(urls, FUN = extract_insights) %>%
   bind_rows()
+
+# Save the data
+saveRDS(genome_insights, "genome_insights.rds")
+
+titles <- replicate(n.titles, expr = {
+  str_c(sample(genome_insights$genome, 1), " provides insights into ", sample(genome_insights$insights, 1))
+})
+  
+
+# Function for randomly sampling genomes and insights
+generate_title <- function(genome_insights, n.titles = 1) {
+  
+  replicate(n.titles, {str_c(sample(genome_insights$genome, 1), " provides insights into ", sample(genome_insights$insights, 1))})
+  
+}
+
+
   
 generate_title(genome_insights, n.titles = 1)
